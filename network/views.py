@@ -10,8 +10,10 @@ from .forms import NewPostForm
 
 
 def index(request):
+    posts = Post.objects.all().order_by('date_created').reverse()
     return render(request, "network/index.html", {
-        'form': NewPostForm()
+        'form': NewPostForm(),
+        'posts': posts
     })
 
 
