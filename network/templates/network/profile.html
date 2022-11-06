@@ -1,0 +1,23 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h2 class="my-4">{{ poster }}'s profile</h2>
+
+    <!-- number of user's followers -->
+
+    <!-- number of pp that user follows -->
+
+    <!-- button Follow or Unfollow for other users -->
+
+    <!-- All of user's posts -->
+    {% for post in posts %}
+    <div class="border rounded my-2 p-3" id="post">
+        <h5>{{ post.poster }}</h5>
+        <ul class="list-unstyled">
+            <li>{{ post.content }}</li>
+            <li><small class="text-muted">{{ post.date_created }}</small></li>
+            <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
+        </ul>
+    </div>
+    {% endfor %}
+{% endblock %}

@@ -21,7 +21,7 @@
         <div class="col-lg-7 mt-4">
             {% for post in posts %}
             <div class="border rounded my-2 p-3" id="post">
-                <h5>{{ post.poster }}</h5>
+                <a href="{% url 'profile' post.poster %}"><h5>{{ post.poster }}</h5></a>
                 <ul class="list-unstyled">
                     <li>{{ post.content }}</li>
                     <li><small class="text-muted">{{ post.date_created }}</small></li>

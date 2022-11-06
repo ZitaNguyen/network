@@ -83,3 +83,13 @@ def add_post(request):
             )
 
         return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+def profile(request, poster_name):
+    poster_id = User.objects.filter(username=poster_name).first()
+    posts = Post.objects.filter(poster=poster_id).order_by('date_created').reverse()
+    return render(request, "network/profile.html", {
+        'posts': posts,
+        'poster': poster_name
+    })
