@@ -1,36 +1,50 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <h2 class="my-4">{{ poster }}'s profile</h2>
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <h2 class="my-4">{{ poster }}'s profile</h2>
+        </li>
+        <li class="list-inline-item">
+            <!-- button Follow or Unfollow for other users -->
+            {% if poster != request.user.username %}
+                {% if follow_list is None or posts.first.poster not in follow_list.followings.all %}
+                <form action="{% url 'toggle_follow' poster %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary mb-3 border-primary">Follow</button>
+                </form>
+                {% else %}
+                <form action="{% url 'toggle_follow' poster %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger mb-3 border-danger">Unfollow</button>
+                </form>
+                {% endif %}
+            {% endif %}
+        </li>
+    </ul>
 
-    <!-- number of user's followers -->
-
-    <!-- number of pp that user follows -->
-
-    <!-- button Follow or Unfollow for other users -->
-    {% if poster != request.user.username %}
-        {% if follow_list is None or posts.first.poster not in follow_list.followings.all %}
-        <form action="{% url 'toggle_follow' poster %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary mb-3 border-primary">Follow</button>
-        </form>
-        {% else %}
-        <form action="{% url 'toggle_follow' poster %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger mb-3 border-danger">Unfollow</button>
-        </form>
-        {% endif %}
-    {% endif %}
+    <ul class="list-inline">
+        <li class="list-inline-item h6">
+            <!-- number of user's followers -->
+            <mark>Numbers of followers:</mark> {{ poster_follow_list.followers.count }}
+        </li>
+        <li class="list-inline-item h6">
+            <!-- number of pp that user follows -->
+            <mark>Numbers of followings:</mark> {{ poster_follow_list.followings.count }}
+        </li>
+    </ul>
 
     <!-- All of user's posts -->
-    {% for post in posts %}
-    <div class="border rounded my-2 p-3" id="post">
-        <h5>{{ post.poster }}</h5>
-        <ul class="list-unstyled">
-            <li>{{ post.content }}</li>
-            <li><small class="text-muted">{{ post.date_created }}</small></li>
-            <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
-        </ul>
+    <div class="mt-5">
+        {% for post in posts %}
+        <div class="border rounded my-2 p-3" id="post">
+            <h5>{{ post.poster }}</h5>
+            <ul class="list-unstyled">
+                <li>{{ post.content }}</li>
+                <li><small class="text-muted">{{ post.date_created }}</small></li>
+                <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
+            </ul>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 {% endblock %}

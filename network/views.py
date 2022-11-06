@@ -93,11 +93,16 @@ def profile(request, poster_name):
         follow_list = FollowList.objects.get(user=request.user)
     except FollowList.DoesNotExist:
         follow_list = None
+    try:
+        poster_follow_list = FollowList.objects.get(user=poster_id)
+    except FollowList.DoesNotExist:
+        poster_follow_list = None
 
     return render(request, "network/profile.html", {
         'posts': posts,
         'poster': poster_name,
-        'follow_list': follow_list
+        'follow_list': follow_list,
+        'poster_follow_list': poster_follow_list
     })
 
 
