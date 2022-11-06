@@ -15,3 +15,12 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.poster}"
+
+
+class FollowList(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
+    followings = models.ManyToManyField('User', related_name='followings', blank=True)
+    followers = models.ManyToManyField('User', related_name='followers', blank=True)
+
+    def __str__(self):
+        return f"{self.user}"

@@ -8,6 +8,19 @@
     <!-- number of pp that user follows -->
 
     <!-- button Follow or Unfollow for other users -->
+    {% if poster != request.user.username %}
+        {% if follow_list is None or posts.first.poster not in follow_list.followings.all %}
+        <form action="{% url 'toggle_follow' poster %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary mb-3 border-primary">Follow</button>
+        </form>
+        {% else %}
+        <form action="{% url 'toggle_follow' poster %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger mb-3 border-danger">Unfollow</button>
+        </form>
+        {% endif %}
+    {% endif %}
 
     <!-- All of user's posts -->
     {% for post in posts %}
