@@ -12,7 +12,6 @@ from .forms import NewPostForm
 def index(request):
     posts = Post.objects.all().order_by('date_created').reverse()
     return render(request, "network/index.html", {
-        'form': NewPostForm(),
         'posts': posts
     })
 
@@ -82,7 +81,7 @@ def add_post(request):
                 content = content
             )
 
-        return HttpResponseRedirect(reverse('index'))
+        return redirect('profile', poster_name=request.user.username)
 
 
 @login_required
@@ -102,7 +101,8 @@ def profile(request, poster_name):
         'posts': posts,
         'poster': poster_name,
         'follow_list': follow_list,
-        'poster_follow_list': poster_follow_list
+        'poster_follow_list': poster_follow_list,
+        'form': NewPostForm()
     })
 
 
