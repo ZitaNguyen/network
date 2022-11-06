@@ -150,3 +150,25 @@ def toggle_follow(request, poster_name):
             user_follower_list.save()
 
     return redirect('profile', poster_name=poster_name)
+
+
+@login_required
+def following(request):
+    all_posts = []
+    try:
+        follow_list = FollowList.objects.get(user=request.user)
+    except FollowList.DoesNotExist:
+        follow_list = None
+
+    if follow_list is None or follow_list.followings.all() is None:
+        all_posts = []
+    else:
+        followings = follow_list.followings.all()
+
+        for following in followings:
+            posts = Post.objects.filter(poster=following)
+            all_posts.append(posts)
+
+    return render(request, "network/following.html", {
+        'all_posts': all_posts
+    })

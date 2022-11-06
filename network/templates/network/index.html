@@ -11,7 +11,7 @@
                 {{ form.non_field_errors }}
                 <div class="fieldWrapper form-group">
                     {{ form.content.errors }}
-                    <label for="{{ form.content.id_for_label }}">New Post</label>
+                    <label for="{{ form.content.id_for_label }}" class="h5">New Post</label>
                     {{ form.content }}
                 </div>
                 <input type="submit" value="Post" class="btn btn-primary">
@@ -19,6 +19,7 @@
         </div>
         <!-- Old Posts -->
         <div class="col-lg-7 mt-4">
+            
             {% for post in posts %}
             <div class="border rounded my-2 p-3" id="post">
                 <a href="{% url 'profile' post.poster %}"><h5>{{ post.poster }}</h5></a>
