@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .models import User, Post, FollowList
 from .forms import NewPostForm
@@ -11,8 +12,11 @@ from .forms import NewPostForm
 
 def index(request):
     posts = Post.objects.all().order_by('date_created').reverse()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, "network/index.html", {
-        'posts': posts
+        'page_obj': page_obj
     })
 
 
@@ -97,8 +101,12 @@ def profile(request, poster_name):
     except FollowList.DoesNotExist:
         poster_follow_list = None
 
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/profile.html", {
-        'posts': posts,
+        'page_obj': page_obj,
         'poster': poster_name,
         'follow_list': follow_list,
         'poster_follow_list': poster_follow_list,
