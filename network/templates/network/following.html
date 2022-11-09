@@ -3,25 +3,14 @@
 {% block body %}
     <h2 class="my-4">Following Posts</h2>
 
-    <div class="row">
-        {% if not all_posts %}
+    <div class="row mb-5">
+        {% if not page_obj %}
         <div class="alert alert-info" role="alert">
             You need to follow someone to see posts in this page!
         </div>
         {% else %}
         <div class="col-lg-8 offset-lg-2 mt-4">
-            {% for posts in all_posts %}
-                {% for post in posts %}
-                <div class="border rounded my-2 p-3" id="post">
-                    <a href="{% url 'profile' post.poster %}"><h5>{{ post.poster }}</h5></a>
-                    <ul class="list-unstyled">
-                        <li>{{ post.content }}</li>
-                        <li><small class="text-muted">{{ post.date_created }}</small></li>
-                        <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
-                    </ul>
-                </div>
-                {% endfor %}
-            {% endfor %}
+            {% include "network/posts.html" %}
         </div>
         {% endif %}
     </div>

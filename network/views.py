@@ -175,8 +175,14 @@ def following(request):
 
         for following in followings:
             posts = Post.objects.filter(poster=following)
-            all_posts.append(posts)
+            for post in posts:
+                all_posts.append(post)
+
+    all_posts.sort(key=lambda x: x.date_created, reverse=True)
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "network/following.html", {
-        'all_posts': all_posts
+        'page_obj': page_obj
     })
