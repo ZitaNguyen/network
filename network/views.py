@@ -104,8 +104,9 @@ def profile(request, poster_name):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-
+    print(poster_name, follow_list.followings)
     return render(request, "network/profile.html", {
+        'poster_id': poster_id,
         'page_obj': page_obj,
         'poster': poster_name,
         'follow_list': follow_list,

@@ -8,7 +8,7 @@
         <li class="list-inline-item">
             <!-- button Follow or Unfollow for other users -->
             {% if poster != request.user.username %}
-                {% if follow_list is None or posts.first.poster not in follow_list.followings.all %}
+                {% if follow_list is None or poster_id not in follow_list.followings.all %}
                 <form action="{% url 'toggle_follow' poster %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-primary mb-3 border-primary">Follow</button>
