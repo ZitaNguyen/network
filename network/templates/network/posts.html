@@ -2,11 +2,17 @@
     {% for post in page_obj %}
     <div class="border rounded my-2 p-3" id="post">
         <a href="{% url 'profile' post.poster %}"><h5>{{ post.poster }}</h5></a>
-        <ul class="list-unstyled">
-            <li>{{ post.content }}</li>
-            <li><small class="text-muted">{{ post.date_created }}</small></li>
-            <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
-        </ul>
+        <div id="post-{{ post.id }}">
+            <ul class="list-unstyled">
+                <li id="post-content">{{ post.content }}</li>
+                <li><small class="text-muted">{{ post.date_created }}</small></li>
+                <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
+            </ul>
+            <!-- Edit button  -->
+            {% if user.is_authenticated and poster == request.user.username %}
+            <a href="javascript:void(0)" id="edit"  data-id="{{ post.id }}" class="btn btn-primary" role="button">Edit</a>
+            {% endif %}
+        </div>
     </div>
     {% endfor %}
 

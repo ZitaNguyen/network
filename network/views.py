@@ -1,10 +1,13 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import User, Post, FollowList
 from .forms import NewPostForm
@@ -104,7 +107,7 @@ def profile(request, poster_name):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(poster_name, follow_list.followings)
+
     return render(request, "network/profile.html", {
         'poster_id': poster_id,
         'page_obj': page_obj,
@@ -187,3 +190,21 @@ def following(request):
     return render(request, "network/following.html", {
         'page_obj': page_obj
     })
+
+
+@csrf_exempt
+@login_required
+def edit_post(request, post_id):
+
+    # Query for requested post
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found"}, status=404)
+
+    # Update post content
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        post.content = data["content"]
+        post.save()
+        return HttpResponse(status=204)
