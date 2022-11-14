@@ -11,7 +11,7 @@ class Post(models.Model):
     poster = models.ForeignKey('User', on_delete=models.CASCADE, related_name='poster')
     content = models.TextField()
     date_created = models.DateTimeField(default=timezone.now)
-    number_of_like = models.IntegerField(default=0)
+    fan = models.ManyToManyField('User', related_name='likes', blank=True)
 
     def __str__(self):
         return f"{self.poster}"

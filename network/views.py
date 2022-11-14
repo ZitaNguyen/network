@@ -208,3 +208,28 @@ def edit_post(request, post_id):
         post.content = data["content"]
         post.save()
         return HttpResponse(status=204)
+
+
+@csrf_exempt
+@login_required
+def toggle_like(request, post_id):
+
+    # Query for requested post
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found"}, status=404)
+
+    # Update post content
+    if request.method == "PUT":
+        fan = post.fan.all()
+        # if user haven't liked the post
+        if fan is None or request.user not in fan:
+            # like post
+            post.fan.add(request.user)
+            post.save()
+        else:
+            # unlike post
+            post.fan.remove(request.user)
+            post.save()
+        return HttpResponse(status=204)

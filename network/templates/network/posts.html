@@ -1,16 +1,23 @@
 <div>
     {% for post in page_obj %}
-    <div class="border rounded my-2 p-3" id="post">
+    <div class="border rounded my-2 p-3" id="post-{{ post.id }}">
         <a href="{% url 'profile' post.poster %}"><h5>{{ post.poster }}</h5></a>
-        <div id="post-{{ post.id }}">
+        <div id="post-details-{{ post.id }}">
             <ul class="list-unstyled">
-                <li id="post-content">{{ post.content }}</li>
+                <li id="post-content-{{ post.id }}">{{ post.content }}</li>
                 <li><small class="text-muted">{{ post.date_created }}</small></li>
-                <li><i class="bi bi-heart-fill" id="heart"></i> {{ post.number_of_like }}</li>
+                <!-- Only show heart icon to other users, not poster -->
+                {% if post.poster != request.user %}
+                    {% if post.fan is None or request.user not in post.fan.all %}
+                    <li class="fan-{{ post.id }}"><i class="bi bi-heart" id="heart-empty" data-id="{{ post.id }}" data-action="like"></i> {{ post.fan.count }} </li>
+                    {% else %}
+                    <li class="fan-{{ post.id }}"><i class="bi bi-heart-fill" id="heart-fill" data-id="{{ post.id }}" data-action="unlike"></i> {{ post.fan.count }} </li>
+                    {% endif %}
+                {% endif %}
             </ul>
             <!-- Edit button  -->
-            {% if user.is_authenticated and poster == request.user.username %}
-            <a href="javascript:void(0)" id="edit"  data-id="{{ post.id }}" class="btn btn-primary" role="button">Edit</a>
+            {% if request.user.is_authenticated and post.poster == request.user %}
+            <a href="javascript:void(0)" id="edit-{{ post.id }}" data-id="{{ post.id }}" class="btn btn-primary" role="button">Edit</a>
             {% endif %}
         </div>
     </div>

@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     document.addEventListener('click', event => {
+        element = event.target;
 
-        if (event.target.id === 'edit') {
-            let postId = document.querySelector('#edit').dataset.id;
-            let post = document.querySelector('#post');
-            let postDetails = document.querySelector(`#post-${postId}`);
-            let postContent = document.querySelector('#post-content');
+        if (element.id.startsWith('edit-')) {
+            let postId = element.dataset.id;
+            let post = document.querySelector(`#post-${postId}`);
+            let postDetails = document.querySelector(`#post-details-${postId}`);
+            let postContent = document.querySelector(`#post-content-${postId}`);
 
             // Add textarea to edit post
             let updateContent = document.createElement('textarea');
@@ -39,6 +40,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             })
        }
+
+       if (element.id.startsWith('heart-')) {
+            let postId = element.dataset.id;
+            let fan = document.querySelector(`.fan-${postId}`);
+
+            // Update fan list
+            fetch(`/toggle_like/${postId}`, {
+                method: 'PUT'
+            })
+            .then (function (response) {
+                if (response.status == 204) {
+                    if (element.dataset.action == "like") {
+                        totalFan = parseInt(fan.textContent);
+                        fan.innerHTML = '';
+                        fan.innerHTML = `
+                            <i class="bi bi-heart-fill" id="heart-fill" data-id="${postId}" data-action="unlike"></i> ${totalFan + 1}
+                        `;
+                    }
+                    if (element.dataset.action == "unlike") {
+                        totalFan = parseInt(fan.textContent);
+                        fan.innerHTML = '';
+                        fan.innerHTML = `
+                            <i class="bi bi-heart" id="heart-empty" data-id="${postId}" data-action="like"></i> ${totalFan - 1}
+                        `;
+                    }
+                }
+            })
+       }
+
     })
 
 });
