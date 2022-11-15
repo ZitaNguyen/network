@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // Edit post and toggle like
     document.addEventListener('click', event => {
         element = event.target;
 
