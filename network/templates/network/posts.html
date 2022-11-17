@@ -31,15 +31,35 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            {% endif %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.number }}">{{ page_obj.number }}
-                    <span class="sr-only">(current)</span>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+                {% if i == page_obj.number %}
+                <li class="page-item active">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
             {% if page_obj.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
