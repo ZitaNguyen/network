@@ -6,3 +6,8 @@
 #heart-fill {
     color: red;
 }
+
+.disabled-icon {
+    opacity: 0.6;
+    pointer-events: none;
+}

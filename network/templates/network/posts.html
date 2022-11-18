@@ -6,13 +6,16 @@
             <ul class="list-unstyled">
                 <li id="post-content-{{ post.id }}">{{ post.content }}</li>
                 <li><small class="text-muted">{{ post.date_created }}</small></li>
-                <!-- Only show heart icon to other users, not poster -->
+                <!-- Like icon -->
                 {% if post.poster != request.user %}
                     {% if post.fan is None or request.user not in post.fan.all %}
                     <li class="fan-{{ post.id }}"><i class="bi bi-heart" id="heart-empty" data-id="{{ post.id }}" data-action="like"></i> {{ post.fan.count }} </li>
                     {% else %}
                     <li class="fan-{{ post.id }}"><i class="bi bi-heart-fill" id="heart-fill" data-id="{{ post.id }}" data-action="unlike"></i> {{ post.fan.count }} </li>
                     {% endif %}
+                <!-- poster can't like his own posts -->
+                {% else %}
+                <li class="fan-{{ post.id }} disabled-icon"><i class="bi bi-heart" id="heart-empty" data-id="{{ post.id }}" data-action="like"></i> {{ post.fan.count }} </li>
                 {% endif %}
             </ul>
             <!-- Edit button  -->
